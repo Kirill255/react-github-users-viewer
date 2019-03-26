@@ -11,7 +11,7 @@ const language = (state = "javascript", action) => {
   }
 };
 
-const users = (state = { isFetching: false, items: [] }, action) => {
+const users = (state = { isFetching: false, items: [], fetchedAt: 0 }, action) => {
   switch (action.type) {
     case REQUEST_USERS:
       return {
@@ -23,7 +23,8 @@ const users = (state = { isFetching: false, items: [] }, action) => {
       return {
         ...state,
         isFetching: false,
-        items: action.users
+        items: action.users,
+        receivedAt: action.receivedAt
       };
 
     default:
