@@ -1,8 +1,23 @@
 import axios from "axios";
+import NProgress from "nprogress";
 
-const API_PREFIX = "https://api.github.com";
+const API_BASE_URL = "https://api.github.com";
 const NUMBER_OF_PROFILES_TO_DISPLAY = 100;
 const API_TOKEN = "fdd83349eaddc6a102419f86dca3743fd1a542d7";
+
+const apiClient = axios.create({
+  baseURL: API_BASE_URL
+});
+
+apiClient.interceptors.request.use((config) => {
+  NProgress.start();
+  return config;
+});
+
+apiClient.interceptors.response.use((response) => {
+  NProgress.done();
+  return response;
+});
 
 export function getPopularUsersByLanguage(language) {
   const params = {
@@ -13,7 +28,7 @@ export function getPopularUsersByLanguage(language) {
     order: "desc"
   };
 
-  return axios.get(`${API_PREFIX}/search/users`, { params });
+  return apiClient.get("/search/users", { params });
 }
 
 export default {

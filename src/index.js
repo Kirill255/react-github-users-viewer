@@ -6,6 +6,7 @@ import App from "./containers/App";
 import store from "./store";
 
 import "modern-normalize";
+import "nprogress/nprogress.css";
 import "./assets/main.css";
 
 import * as serviceWorker from "./serviceWorker";

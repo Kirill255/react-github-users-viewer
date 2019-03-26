@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Loader from "react-loader-spinner";
 import Picker from "../components/Picker";
 import UserList from "../components/UserList";
 
 import { fetchUsersIfNeeded, selectLanguage } from "../actions";
+
+import "./App.css";
 
 const LANGUAGES = [
   "javascript",
@@ -45,10 +48,16 @@ class App extends Component {
     const { users, selectedLanguage, isFetching } = this.props;
 
     return (
-      <div>
+      <div className="app">
         <Picker value={selectedLanguage} options={LANGUAGES} onChange={this.handleLanguageChange} />
 
-        {isFetching ? "Loading..." : <UserList users={users} />}
+        <div className="app__content">
+          {isFetching ? (
+            <Loader type="CradleLoader" color="#00BFFF" height="100" width="100" />
+          ) : (
+            <UserList users={users} />
+          )}
+        </div>
       </div>
     );
   }
