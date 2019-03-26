@@ -5,7 +5,7 @@ import App from "./containers/App";
 
 import store from "./store";
 
-import "normalize.css";
+import "modern-normalize";
 import "./assets/main.css";
 
 import * as serviceWorker from "./serviceWorker";
