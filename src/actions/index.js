@@ -24,3 +24,21 @@ export const fetchUsers = (language) => (dispatch) => {
     .getPopularUsersByLanguage(language)
     .then((data) => dispatch(receiveUsers(language, data)));
 };
+
+// helper
+const shouldFetchPosts = (state, language) => {
+  const users = state.usersByLanguage[language];
+
+  if (users) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const fetchUsersIfNeeded = (language) => (dispatch, getState) => {
+  // загрузить только если их ещё нет
+  if (shouldFetchPosts(getState(), language)) {
+    return dispatch(fetchUsers(language));
+  }
+};

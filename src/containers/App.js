@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Picker from "../components/Picker";
 import UserList from "../components/UserList";
 
-import { fetchUsers, selectLanguage } from "../actions";
+import { fetchUsersIfNeeded, selectLanguage } from "../actions";
 
 const LANGUAGES = [
   "javascript",
@@ -54,12 +54,17 @@ class App extends Component {
   }
 }
 
+const getUsersByLanguage = (state) => {
+  return state.usersByLanguage[state.language] || {};
+};
+
 const mapStateToProps = (state) => {
   console.log(state);
+  const users = getUsersByLanguage(state);
 
   return {
-    users: state.users.items,
-    isFetching: state.users.isFetching,
+    users: users.items || [],
+    isFetching: users.isFetching,
     selectedLanguage: state.language
   };
 };
@@ -67,7 +72,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onLanguageSelect: (language) => dispatch(selectLanguage(language)),
-    onFetchUsers: (language) => dispatch(fetchUsers(language))
+    onFetchUsers: (language) => dispatch(fetchUsersIfNeeded(language))
   };
 };
 

@@ -31,4 +31,19 @@ const users = (state = { isFetching: false, items: [] }, action) => {
   }
 };
 
-export default combineReducers({ users, language });
+// https://redux.js.org/advanced/async-actions#handling-actions
+const usersByLanguage = (state = {}, action) => {
+  switch (action.type) {
+    case REQUEST_USERS:
+    case RECEIVE_USERS:
+      return {
+        ...state,
+        [action.language]: users([action.language], action)
+      };
+
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({ usersByLanguage, language });
