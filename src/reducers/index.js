@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { SELECT_LANGUAGE, REQUEST_USERS, RECEIVE_USERS } from "../constants";
+import { SELECT_LANGUAGE, REQUEST_USERS, RECEIVE_USERS, ERROR_USERS } from "../constants";
 
 const language = (state = "javascript", action) => {
   switch (action.type) {
@@ -11,7 +11,7 @@ const language = (state = "javascript", action) => {
   }
 };
 
-const users = (state = { isFetching: false, items: [], fetchedAt: 0 }, action) => {
+const users = (state = { isFetching: false, items: [], fetchedAt: 0, error: null }, action) => {
   switch (action.type) {
     case REQUEST_USERS:
       return {
@@ -24,7 +24,15 @@ const users = (state = { isFetching: false, items: [], fetchedAt: 0 }, action) =
         ...state,
         isFetching: false,
         items: action.users,
-        receivedAt: action.receivedAt
+        receivedAt: action.receivedAt,
+        error: null
+      };
+
+    case ERROR_USERS:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.error
       };
 
     default:
@@ -37,6 +45,7 @@ const usersByLanguage = (state = {}, action) => {
   switch (action.type) {
     case REQUEST_USERS:
     case RECEIVE_USERS:
+    case ERROR_USERS:
       return {
         ...state,
         [action.language]: users([action.language], action)

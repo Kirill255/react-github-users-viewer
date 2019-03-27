@@ -45,7 +45,15 @@ class App extends Component {
   };
 
   render() {
-    const { users, selectedLanguage, isFetching } = this.props;
+    const { users, selectedLanguage, isFetching, error } = this.props;
+
+    if (error) {
+      return (
+        <div className="app">
+          <div className="app__error">{error}</div>
+        </div>
+      );
+    }
 
     return (
       <div className="app">
@@ -74,7 +82,8 @@ const mapStateToProps = (state) => {
   return {
     users: users.items || [],
     isFetching: users.isFetching,
-    selectedLanguage: state.language
+    selectedLanguage: state.language,
+    error: users.error
   };
 };
 
