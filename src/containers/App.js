@@ -5,6 +5,7 @@ import Picker from "../components/Picker";
 import UserList from "../components/UserList";
 
 import { fetchUsersIfNeeded, selectLanguage } from "../actions";
+import { getUsersByLanguage } from "../selectors";
 
 import "./App.css";
 
@@ -25,27 +26,17 @@ const LANGUAGES = [
 
 class App extends Component {
   componentDidMount() {
-    const { selectedLanguage, onFetchUsers } = this.props;
-
-    onFetchUsers(selectedLanguage);
+    this.props.fetchUsersIfNeeded(this.props.selectedLanguage);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedLanguage !== this.props.selectedLanguage) {
-      const { selectedLanguage, onFetchUsers } = nextProps;
-
-      onFetchUsers(selectedLanguage);
+      this.props.fetchUsersIfNeeded(nextProps.selectedLanguage);
     }
   }
 
-  handleLanguageChange = (language) => {
-    const { onLanguageSelect } = this.props;
-
-    onLanguageSelect(language);
-  };
-
   render() {
-    const { users, selectedLanguage, isFetching, error } = this.props;
+    const { users, selectedLanguage, isFetching, error, selectLanguage } = this.props;
 
     if (error) {
       return (
@@ -57,7 +48,7 @@ class App extends Component {
 
     return (
       <div className="app">
-        <Picker value={selectedLanguage} options={LANGUAGES} onChange={this.handleLanguageChange} />
+        <Picker value={selectedLanguage} options={LANGUAGES} onChange={selectLanguage} />
 
         <div className="app__content">
           {isFetching ? (
@@ -71,30 +62,17 @@ class App extends Component {
   }
 }
 
-const getUsersByLanguage = (state) => {
-  return state.usersByLanguage[state.language] || {};
-};
-
-const mapStateToProps = (state) => {
-  console.log(state);
-  const users = getUsersByLanguage(state);
-
-  return {
-    users: users.items || [],
-    isFetching: users.isFetching,
-    selectedLanguage: state.language,
-    error: users.error
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onLanguageSelect: (language) => dispatch(selectLanguage(language)),
-    onFetchUsers: (language) => dispatch(fetchUsersIfNeeded(language))
-  };
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  (state) => {
+    console.log(state);
+    const users = getUsersByLanguage(state);
+
+    return {
+      users: users.items || [],
+      isFetching: users.isFetching,
+      selectedLanguage: state.language,
+      error: users.error
+    };
+  },
+  { selectLanguage, fetchUsersIfNeeded }
 )(App);
