@@ -4,8 +4,8 @@ import Loader from "react-loader-spinner";
 import Picker from "../components/Picker";
 import UserList from "../components/UserList";
 
-import { fetchUsersIfNeeded, selectLanguage } from "../actions";
-import { getUsersByLanguage } from "../selectors";
+import { selectLanguage } from "../actions";
+import { getUsersByLanguage, getSelectedLanguage } from "../selectors";
 
 import "./App.css";
 
@@ -25,16 +25,6 @@ const LANGUAGES = [
 ];
 
 class App extends Component {
-  componentDidMount() {
-    this.props.fetchUsersIfNeeded(this.props.selectedLanguage);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedLanguage !== this.props.selectedLanguage) {
-      this.props.fetchUsersIfNeeded(nextProps.selectedLanguage);
-    }
-  }
-
   render() {
     const { users, selectedLanguage, isFetching, error, selectLanguage } = this.props;
 
@@ -70,9 +60,9 @@ export default connect(
     return {
       users: users.items || [],
       isFetching: users.isFetching,
-      selectedLanguage: state.language,
-      error: users.error
+      error: users.error,
+      selectedLanguage: getSelectedLanguage(state)
     };
   },
-  { selectLanguage, fetchUsersIfNeeded }
+  { selectLanguage }
 )(App);

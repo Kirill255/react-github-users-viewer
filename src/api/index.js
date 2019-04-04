@@ -30,7 +30,3 @@ export function getPopularUsersByLanguage(language) {
 
   return apiClient.get("/search/users", { params });
 }
-
-export default {
-  getPopularUsersByLanguage
-};

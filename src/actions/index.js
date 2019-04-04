@@ -1,5 +1,4 @@
 import { SELECT_LANGUAGE, REQUEST_USERS, RECEIVE_USERS, ERROR_USERS } from "../constants";
-import api from "../api";
 
 export const selectLanguage = (language) => ({
   type: SELECT_LANGUAGE,
@@ -24,21 +23,7 @@ export const errorUsers = (error, language) => ({
   error: error
 });
 
-export const fetchUsers = (language) => (dispatch) => {
-  dispatch(requestUsers(language));
-
-  return api
-    .getPopularUsersByLanguage(language)
-    .then((data) => dispatch(receiveUsers(language, data)))
-    .catch((error) => {
-      if (error.response) {
-        dispatch(errorUsers(error.response.data.message, language));
-      } else {
-        dispatch(errorUsers(error.message, language));
-      }
-    });
-};
-
+/*
 const INVALIDATE_TIME = 60000; // 1 min
 
 // helper
@@ -61,3 +46,4 @@ export const fetchUsersIfNeeded = (language) => (dispatch, getState) => {
     return dispatch(fetchUsers(language));
   }
 };
+*/
